@@ -10,7 +10,7 @@ module.exports = (env, argv) => {
       path: path.resolve(__dirname, 'dist'),
       filename: 'bundle.[contenthash].js',
       clean: true,
-      publicPath: isProduction ? '/scum-ab-hack-tool/' : '/'
+      publicPath: isProduction ? '/scum-door-hacking-tool/' : '/'
     },
   module: {
     rules: [

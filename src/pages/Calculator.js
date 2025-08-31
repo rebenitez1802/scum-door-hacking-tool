@@ -119,6 +119,27 @@ function Calculator() {
     setOperations(newOperations);
   };
 
+  const handleKeyDown = (event, index, side) => {
+    const key = event.key;
+    const operatorMap = {
+      '+': '+',
+      '-': '-',
+      '*': '*',
+      '/': '/',
+      'x': '*',
+      'X': '*',
+      '×': '*',
+      '÷': '/'
+    };
+    
+    if (operatorMap[key]) {
+      event.preventDefault();
+      const newOperations = [...operations];
+      newOperations[index][side].operator = operatorMap[key];
+      setOperations(newOperations);
+    }
+  };
+
   const solvePuzzle = async () => {
     if (!expectedValues.left || !expectedValues.right) {
       message.error('⚠️ Please enter target voltages for both wires');
@@ -181,7 +202,8 @@ function Calculator() {
           <Input
             value={operations[index].left.value}
             onChange={(e) => handleOperationInputChange(index, 'left', e.target.value)}
-            placeholder="+2, -5, *3..."
+            onKeyDown={(e) => handleKeyDown(e, index, 'left')}
+            placeholder="+2, -5, *3 or +,-,*,/"
             style={{ flex: 1 }}
             size="small"
           />
@@ -210,7 +232,8 @@ function Calculator() {
           <Input
             value={operations[index].right.value}
             onChange={(e) => handleOperationInputChange(index, 'right', e.target.value)}
-            placeholder="+2, -5, *3..."
+            onKeyDown={(e) => handleKeyDown(e, index, 'right')}
+            placeholder="+2, -5, *3 or +,-,*,/"
             style={{ flex: 1 }}
             size="small"
           />

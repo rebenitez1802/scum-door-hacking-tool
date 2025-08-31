@@ -191,6 +191,7 @@ function Calculator() {
           <Select
             value={operations[index].left.operator}
             onChange={(value) => updateOperation(index, 'left', 'operator', value)}
+            onKeyDown={(e) => handleKeyDown(e, index, 'left')}
             style={{ width: 50, minWidth: 40 }}
             size="small"
           >
@@ -202,8 +203,7 @@ function Calculator() {
           <Input
             value={operations[index].left.value}
             onChange={(e) => handleOperationInputChange(index, 'left', e.target.value)}
-            onKeyDown={(e) => handleKeyDown(e, index, 'left')}
-            placeholder="+2, -5, *3 or +,-,*,/"
+            placeholder="+2, -5, *3..."
             style={{ flex: 1 }}
             size="small"
           />
@@ -221,6 +221,7 @@ function Calculator() {
           <Select
             value={operations[index].right.operator}
             onChange={(value) => updateOperation(index, 'right', 'operator', value)}
+            onKeyDown={(e) => handleKeyDown(e, index, 'right')}
             style={{ width: 50, minWidth: 40 }}
             size="small"
           >
@@ -232,8 +233,7 @@ function Calculator() {
           <Input
             value={operations[index].right.value}
             onChange={(e) => handleOperationInputChange(index, 'right', e.target.value)}
-            onKeyDown={(e) => handleKeyDown(e, index, 'right')}
-            placeholder="+2, -5, *3 or +,-,*,/"
+            placeholder="+2, -5, *3..."
             style={{ flex: 1 }}
             size="small"
           />

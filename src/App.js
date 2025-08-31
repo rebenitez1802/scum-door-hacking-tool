@@ -17,7 +17,7 @@ function App() {
     >
       <Layout style={{ minHeight: '100vh' }}>
         <Header />
-        <Content style={{ padding: '24px' }}>
+        <Content style={{ padding: '24px 16px' }}>
           <Routes>
             <Route path="/" element={<Calculator />} />
             <Route path="/home" element={<Home />} />

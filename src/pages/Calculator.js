@@ -112,12 +112,13 @@ function Calculator() {
 
   const renderOperationRow = (index) => (
     <Row key={index} gutter={16} style={{ marginBottom: 16 }}>
-      <Col span={10}>
+      <Col xs={10} sm={10} md={10}>
         <Space.Compact style={{ display: 'flex', width: '100%' }}>
           <Select
             value={operations[index].left.operator}
             onChange={(value) => updateOperation(index, 'left', 'operator', value)}
-            style={{ width: 60 }}
+            style={{ width: 50, minWidth: 40 }}
+            size="small"
           >
             <Option value="+">+</Option>
             <Option value="-">-</Option>
@@ -127,24 +128,26 @@ function Calculator() {
           <InputNumber
             value={operations[index].left.value}
             onChange={(value) => updateOperation(index, 'left', 'value', value)}
-            placeholder="Voltage"
+            placeholder="V"
             style={{ flex: 1 }}
+            size="small"
           />
         </Space.Compact>
       </Col>
-      <Col span={4} style={{ textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Col xs={4} sm={4} md={4} style={{ textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Switch
           checked={operations[index].enabled}
           onChange={() => toggleOperation(index)}
           size="small"
         />
       </Col>
-      <Col span={10}>
+      <Col xs={10} sm={10} md={10}>
         <Space.Compact style={{ display: 'flex', width: '100%' }}>
           <Select
             value={operations[index].right.operator}
             onChange={(value) => updateOperation(index, 'right', 'operator', value)}
-            style={{ width: 60 }}
+            style={{ width: 50, minWidth: 40 }}
+            size="small"
           >
             <Option value="+">+</Option>
             <Option value="-">-</Option>
@@ -154,8 +157,9 @@ function Calculator() {
           <InputNumber
             value={operations[index].right.value}
             onChange={(value) => updateOperation(index, 'right', 'value', value)}
-            placeholder="Voltage"
+            placeholder="V"
             style={{ flex: 1 }}
+            size="small"
           />
         </Space.Compact>
       </Col>
@@ -163,7 +167,7 @@ function Calculator() {
   );
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 8px' }}>
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
         <Card>
           <Title level={2}>
@@ -174,10 +178,10 @@ function Calculator() {
           </Text>
         </Card>
 
-        <Row gutter={24}>
+        <Row gutter={[24, 24]}>
           {/* Column 1: Initial Voltage */}
-          <Col span={6}>
-            <Card title="Input Voltage" style={{ height: 'fit-content' }}>
+          <Col xs={24} sm={24} md={8} lg={6}>
+            <Card title="Input Voltage">
               <Space direction="vertical" style={{ width: '100%' }}>
                 <Text type="secondary">Door's base voltage level</Text>
                 <InputNumber
@@ -193,19 +197,19 @@ function Calculator() {
           </Col>
 
           {/* Column 2: Circuit Operations */}
-          <Col span={12}>
+          <Col xs={24} sm={24} md={16} lg={12}>
             <Card title="Circuit Modifications">
               <Text type="secondary" style={{ display: 'block', marginBottom: '16px' }}>
                 Configure voltage modifications for each circuit pair
               </Text>
               <Row gutter={16} style={{ marginBottom: 16 }}>
-                <Col span={10}>
+                <Col xs={10} sm={10} md={10}>
                   <Text strong style={{ color: '#ff4d4f' }}>🔴 Red Wire</Text>
                 </Col>
-                <Col span={4} style={{ textAlign: 'center' }}>
+                <Col xs={4} sm={4} md={4} style={{ textAlign: 'center' }}>
                   <Text strong>Circuit</Text>
                 </Col>
-                <Col span={10}>
+                <Col xs={10} sm={10} md={10}>
                   <Text strong style={{ color: '#1890ff' }}>🔵 Blue Wire</Text>
                 </Col>
               </Row>
@@ -214,55 +218,59 @@ function Calculator() {
           </Col>
 
           {/* Column 3: Voltage Output & Solver */}
-          <Col span={6}>
+          <Col xs={24} sm={24} md={24} lg={6}>
             <Card title="Door Lock Status">
-              <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-                <Card size="small" style={{ borderColor: '#ff4d4f' }}>
-                  <Space direction="vertical" style={{ width: '100%' }}>
-                    <Text type="secondary">🔴 Red Wire Output:</Text>
-                    <Title level={3} style={{ margin: 0, color: '#ff4d4f' }}>
-                      {results.left.toFixed(2)}V
-                    </Title>
-                    <Text type="secondary">Required Voltage:</Text>
-                    <InputNumber
-                      value={expectedValues.left}
-                      onChange={(value) => setExpectedValues(prev => ({ ...prev, left: value }))}
-                      placeholder="Target voltage"
-                      style={{ width: '100%' }}
-                      suffix="V"
-                    />
-                  </Space>
-                </Card>
+              <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
+                <Col xs={24} sm={12} lg={24}>
+                  <Card size="small" style={{ borderColor: '#ff4d4f' }}>
+                    <Space direction="vertical" style={{ width: '100%' }}>
+                      <Text type="secondary">🔴 Red Wire Output:</Text>
+                      <Title level={3} style={{ margin: 0, color: '#ff4d4f' }}>
+                        {results.left.toFixed(2)}V
+                      </Title>
+                      <Text type="secondary">Required Voltage:</Text>
+                      <InputNumber
+                        value={expectedValues.left}
+                        onChange={(value) => setExpectedValues(prev => ({ ...prev, left: value }))}
+                        placeholder="Target voltage"
+                        style={{ width: '100%' }}
+                        suffix="V"
+                      />
+                    </Space>
+                  </Card>
+                </Col>
                 
-                <Card size="small" style={{ borderColor: '#1890ff' }}>
-                  <Space direction="vertical" style={{ width: '100%' }}>
-                    <Text type="secondary">🔵 Blue Wire Output:</Text>
-                    <Title level={3} style={{ margin: 0, color: '#1890ff' }}>
-                      {results.right.toFixed(2)}V
-                    </Title>
-                    <Text type="secondary">Required Voltage:</Text>
-                    <InputNumber
-                      value={expectedValues.right}
-                      onChange={(value) => setExpectedValues(prev => ({ ...prev, right: value }))}
-                      placeholder="Target voltage"
-                      style={{ width: '100%' }}
-                      suffix="V"
-                    />
-                  </Space>
-                </Card>
-                
-                <Button
-                  type="primary"
-                  icon={<ThunderboltOutlined />}
-                  onClick={solvePuzzle}
-                  loading={isSolving}
-                  style={{ width: '100%' }}
-                  size="large"
-                  danger
-                >
-                  🔓 Hack Door
-                </Button>
-              </Space>
+                <Col xs={24} sm={12} lg={24}>
+                  <Card size="small" style={{ borderColor: '#1890ff' }}>
+                    <Space direction="vertical" style={{ width: '100%' }}>
+                      <Text type="secondary">🔵 Blue Wire Output:</Text>
+                      <Title level={3} style={{ margin: 0, color: '#1890ff' }}>
+                        {results.right.toFixed(2)}V
+                      </Title>
+                      <Text type="secondary">Required Voltage:</Text>
+                      <InputNumber
+                        value={expectedValues.right}
+                        onChange={(value) => setExpectedValues(prev => ({ ...prev, right: value }))}
+                        placeholder="Target voltage"
+                        style={{ width: '100%' }}
+                        suffix="V"
+                      />
+                    </Space>
+                  </Card>
+                </Col>
+              </Row>
+              
+              <Button
+                type="primary"
+                icon={<ThunderboltOutlined />}
+                onClick={solvePuzzle}
+                loading={isSolving}
+                style={{ width: '100%' }}
+                size="large"
+                danger
+              >
+                🔓 Hack Door
+              </Button>
             </Card>
           </Col>
         </Row>

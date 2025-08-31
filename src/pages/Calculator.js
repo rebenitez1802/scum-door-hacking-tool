@@ -66,6 +66,59 @@ function Calculator() {
     setOperations(newOperations);
   };
 
+  const parseOperationInput = (inputValue) => {
+    if (!inputValue || typeof inputValue !== 'string') {
+      return { operator: null, value: inputValue };
+    }
+
+    // Remove any whitespace
+    const cleanInput = inputValue.trim();
+    
+    // Check for operator at the beginning
+    const operatorMatch = cleanInput.match(/^([+\-*/×÷])(.*)$/);
+    
+    if (operatorMatch) {
+      let operator = operatorMatch[1];
+      const valueStr = operatorMatch[2].trim();
+      
+      // Normalize operators
+      if (operator === '×') operator = '*';
+      if (operator === '÷') operator = '/';
+      
+      // Parse the numeric value
+      const numValue = parseFloat(valueStr);
+      
+      if (!isNaN(numValue)) {
+        return { operator, value: numValue };
+      }
+    }
+    
+    // If no operator found or invalid format, try to parse as just a number
+    const numValue = parseFloat(cleanInput);
+    if (!isNaN(numValue)) {
+      return { operator: null, value: numValue };
+    }
+    
+    return { operator: null, value: inputValue };
+  };
+
+  const handleOperationInputChange = (index, side, inputValue) => {
+    const parsed = parseOperationInput(inputValue);
+    const newOperations = [...operations];
+    
+    if (parsed.operator) {
+      newOperations[index][side].operator = parsed.operator;
+    }
+    
+    if (parsed.value !== null && parsed.value !== undefined) {
+      newOperations[index][side].value = parsed.value;
+    } else {
+      newOperations[index][side].value = inputValue;
+    }
+    
+    setOperations(newOperations);
+  };
+
   const solvePuzzle = async () => {
     if (!expectedValues.left || !expectedValues.right) {
       message.error('⚠️ Please enter target voltages for both wires');
@@ -125,10 +178,10 @@ function Calculator() {
             <Option value="*">×</Option>
             <Option value="/">/</Option>
           </Select>
-          <InputNumber
+          <Input
             value={operations[index].left.value}
-            onChange={(value) => updateOperation(index, 'left', 'value', value)}
-            placeholder="V"
+            onChange={(e) => handleOperationInputChange(index, 'left', e.target.value)}
+            placeholder="+2, -5, *3..."
             style={{ flex: 1 }}
             size="small"
           />
@@ -154,10 +207,10 @@ function Calculator() {
             <Option value="*">×</Option>
             <Option value="/">/</Option>
           </Select>
-          <InputNumber
+          <Input
             value={operations[index].right.value}
-            onChange={(value) => updateOperation(index, 'right', 'value', value)}
-            placeholder="V"
+            onChange={(e) => handleOperationInputChange(index, 'right', e.target.value)}
+            placeholder="+2, -5, *3..."
             style={{ flex: 1 }}
             size="small"
           />

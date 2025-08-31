@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A web tool to help with SCUM game mini-games",
   "main": "src/index.js",
+  "homepage": "https://rebenitez1802.github.io/scum-door-hacking-tool",
   "scripts": {
     "start": "webpack serve --mode development",
     "build": "webpack --mode production",

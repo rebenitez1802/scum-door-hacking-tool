@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, InputNumber, Select, Switch, Row, Col, Typography, Space, Input, Button, message } from 'antd';
-import { CalculatorOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import { CalculatorOutlined, ThunderboltOutlined, ReloadOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -140,6 +140,19 @@ function Calculator() {
     }
   };
 
+  const clearCircuit = () => {
+    setInitialNumber(0);
+    setOperations(
+      Array(8).fill().map(() => ({
+        left: { operator: '+', value: '' },
+        right: { operator: '+', value: '' },
+        enabled: false
+      }))
+    );
+    setExpectedValues({ left: '', right: '' });
+    message.info('🔄 Circuit reset! All switches disabled and voltages cleared.');
+  };
+
   const solvePuzzle = async () => {
     if (!expectedValues.left || !expectedValues.right) {
       message.error('⚠️ Please enter target voltages for both wires');
@@ -194,6 +207,7 @@ function Calculator() {
             onKeyDown={(e) => handleKeyDown(e, index, 'left')}
             style={{ width: 50, minWidth: 40 }}
             size="small"
+            tabIndex={-1}
           >
             <Option value="+">+</Option>
             <Option value="-">-</Option>
@@ -206,6 +220,7 @@ function Calculator() {
             placeholder="+2, -5, *3..."
             style={{ flex: 1 }}
             size="small"
+            tabIndex={2 + index * 2}
           />
         </Space.Compact>
       </Col>
@@ -214,6 +229,7 @@ function Calculator() {
           checked={operations[index].enabled}
           onChange={() => toggleOperation(index)}
           size="small"
+          tabIndex={-1}
         />
       </Col>
       <Col xs={10} sm={10} md={10}>
@@ -224,6 +240,7 @@ function Calculator() {
             onKeyDown={(e) => handleKeyDown(e, index, 'right')}
             style={{ width: 50, minWidth: 40 }}
             size="small"
+            tabIndex={-1}
           >
             <Option value="+">+</Option>
             <Option value="-">-</Option>
@@ -236,6 +253,7 @@ function Calculator() {
             placeholder="+2, -5, *3..."
             style={{ flex: 1 }}
             size="small"
+            tabIndex={3 + index * 2}
           />
         </Space.Compact>
       </Col>
@@ -267,6 +285,7 @@ function Calculator() {
                   style={{ width: '100%' }}
                   size="large"
                   suffix="V"
+                  tabIndex={1}
                 />
               </Space>
             </Card>
@@ -311,6 +330,7 @@ function Calculator() {
                         placeholder="Target voltage"
                         style={{ width: '100%' }}
                         suffix="V"
+                        tabIndex={18}
                       />
                     </Space>
                   </Card>
@@ -330,6 +350,7 @@ function Calculator() {
                         placeholder="Target voltage"
                         style={{ width: '100%' }}
                         suffix="V"
+                        tabIndex={19}
                       />
                     </Space>
                   </Card>
@@ -341,11 +362,29 @@ function Calculator() {
                 icon={<ThunderboltOutlined />}
                 onClick={solvePuzzle}
                 loading={isSolving}
-                style={{ width: '100%' }}
+                style={{ width: '100%', marginBottom: 8 }}
                 size="large"
                 danger
+                tabIndex={20}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    solvePuzzle();
+                  }
+                }}
               >
                 🔓 Hack Door
+              </Button>
+              
+              <Button
+                type="default"
+                icon={<ReloadOutlined />}
+                onClick={clearCircuit}
+                style={{ width: '100%' }}
+                size="large"
+                tabIndex={-1}
+              >
+                ⚡ Reset Circuit
               </Button>
             </Card>
           </Col>
